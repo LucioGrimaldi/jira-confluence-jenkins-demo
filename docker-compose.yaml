@@ -1,0 +1,39 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  jira:
+    image: atlassian/jira-software
+    environment:
+      - ATL_JDBC_URL=jdbc:postgresql://postgres/test
+      - ATL_JDBC_USER=admin
+      - ATL_DB_TYPE=postgres
+      - ATL_JDBC_PASSWORD=password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+  confluence:
+    image: atlassian/confluence-server
+    environment:
+      - ATL_JDBC_URL=jdbc:postgresql://postgres/test
+      - ATL_JDBC_USER=admin
+      - ATL_DB_TYPE=postgres
+      - ATL_JDBC_PASSWORD=password
+    depends_on:
+      - postgres
+    ports:
+      - "8090:8090"
+
+  jenkins:
+    image: jenkins/jenkins
+    ports:
+      - "8081:8080"
+volumes:
+  postgres_data:
