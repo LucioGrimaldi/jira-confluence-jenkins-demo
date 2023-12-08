@@ -15,6 +15,9 @@ services:
       - ATL_JDBC_USER=admin
       - ATL_DB_TYPE=postgresql
       - ATL_JDBC_PASSWORD=password
+    volumes:
+      - jira_data:/var/lib/jira/data
+      - jira_application_data:/var/atlassian/application-data/jira
     ports:
       - "8080:8080"
     depends_on:
@@ -26,6 +29,9 @@ services:
       - ATL_JDBC_USER=admin
       - ATL_DB_TYPE=postgresql
       - ATL_JDBC_PASSWORD=password
+    volumes:
+      - confluence_data:/var/lib/confluence/data
+      - confluence_application_data:/var/atlassian/application-data/confluence
     depends_on:
       - postgres
     ports:
@@ -35,5 +41,14 @@ services:
     image: jenkins/jenkins
     ports:
       - "8081:8080"
+    volumes:
+      - jenkins_data:/var/lib/jenkins/data
+      - jenkins_home:/var/jenkins_home
 volumes:
   postgres_data:
+  jira_data:
+  jira_application_data:
+  confluence_data:
+  confluence_application_data:
+  jenkins_data:
+  jenkins_home:
