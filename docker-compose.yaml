@@ -1,27 +1,24 @@
 version: '3'
 services:
   postgres:
-    image: postgres
+    image: postgres:15
     environment:
       POSTGRES_DB: test
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      
   jira:
     image: atlassian/jira-software
+    ports:
+      - "8080:8080"
     environment:
-      - ATL_JDBC_URL=jdbc:postgresql://postgres/test
-      - ATL_JDBC_USER=admin
-      - ATL_DB_TYPE=postgresql
-      - ATL_JDBC_PASSWORD=password
+      JIRA_DATABASE_TYPE: internal
     volumes:
       - jira_data:/var/lib/jira/data
       - jira_application_data:/var/atlassian/application-data/jira
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
+
   confluence:
     image: atlassian/confluence-server
     environment:
