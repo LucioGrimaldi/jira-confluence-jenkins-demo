@@ -1,1 +1,2 @@
-docker run -d --name nginx-proxy --network jira-confluence-jenkins-demo_default  -p 80:80 nginx-proxy
+#docker-compose
+docker run -d --name nginx-proxy --network test-network  -p 80:80 nginx-proxy

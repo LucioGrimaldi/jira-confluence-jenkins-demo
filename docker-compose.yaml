@@ -8,6 +8,8 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - test-network
       
   jira:
     image: atlassian/jira-software
@@ -16,8 +18,11 @@ services:
     environment:
       JIRA_DATABASE_TYPE: internal
     volumes:
+      - ./server.xml:/opt/atlassian/jira/conf/server.xml
       - jira_data:/var/lib/jira/data
       - jira_application_data:/var/atlassian/application-data/jira
+    networks:
+      - test-network
 
   confluence:
     image: atlassian/confluence-server
@@ -33,14 +38,24 @@ services:
       - postgres
     ports:
       - "8090:8090"
+    networks:
+      - test-network
 
   jenkins:
     image: jenkins/jenkins
     ports:
       - "8081:8080"
     volumes:
+      - ./scheduled_script.py:/opt/scheduled_script.py
       - jenkins_data:/var/lib/jenkins/data
       - jenkins_home:/var/jenkins_home
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    external: true
+
 volumes:
   postgres_data:
   jira_data:
